@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # ==============================================================================
-# Fast Downloader for ML Lab Files (exp9.ipynb, exp10.ipynb)
+# Fast Downloader for ML Lab Files (exp9.ipynb, exp10.ipynb, exp11.ipynb, exp12.ipynb)
 # Compatible with Ubuntu, Debian, Fedora, Arch, and POSIX shells (sh, bash, zsh)
 # ==============================================================================
 
@@ -16,16 +16,10 @@ echo " Starting Download to: ${TARGET_DIR}"
 echo "=========================================="
 
 # ------------------------------------------------------------------------------
-# Configuration: Replace USERNAME and REPO with your GitHub username & repo
-# (Or replace with your direct file URLs)
+# Configuration: GitHub repository raw URL and files to download
 # ------------------------------------------------------------------------------
 BASE_URL="https://raw.githubusercontent.com/Ashile99/ml-files/main"
-
-FILE1_NAME="exp9.ipynb"
-FILE1_URL="${BASE_URL}/${FILE1_NAME}"
-
-FILE2_NAME="exp10.ipynb"
-FILE2_URL="${BASE_URL}/${FILE2_NAME}"
+FILES="${*:-exp9.ipynb exp10.ipynb exp11.ipynb exp12.ipynb}"
 
 # Helper function to download files using curl or wget
 fetch_file() {
@@ -37,7 +31,7 @@ fetch_file() {
     echo "==> Downloading: ${filename}..."
 
     if command -v curl >/dev/null 2>&1; then
-        if ! curl -fSL --progress-bar "${url}" -o "${destination}"; then
+        if ! curl -fSL --connect-timeout 5 --progress-bar "${url}" -o "${destination}"; then
             echo "Error: Failed to download ${filename} via curl." >&2
             exit 1
         fi
@@ -54,15 +48,17 @@ fetch_file() {
 }
 
 # Download each file
-fetch_file "${FILE1_URL}" "${TARGET_DIR}/${FILE1_NAME}" "${FILE1_NAME}"
-fetch_file "${FILE2_URL}" "${TARGET_DIR}/${FILE2_NAME}" "${FILE2_NAME}"
+for file in ${FILES}; do
+    fetch_file "${BASE_URL}/${file}" "${TARGET_DIR}/${file}" "${file}"
+done
 
 # Verify files exist and print final summary
 echo ""
 echo "=========================================="
 echo " [✓] Download Completed Successfully!"
 echo " Files saved to: ${TARGET_DIR}"
-echo "   - ${FILE1_NAME} ($(ls -lh "${TARGET_DIR}/${FILE1_NAME}" 2>/dev/null | awk '{print $5}' || echo 'saved'))"
-echo "   - ${FILE2_NAME} ($(ls -lh "${TARGET_DIR}/${FILE2_NAME}" 2>/dev/null | awk '{print $5}' || echo 'saved'))"
+for file in ${FILES}; do
+    echo "   - ${file} ($(ls -lh "${TARGET_DIR}/${file}" 2>/dev/null | awk '{print $5}' || echo 'saved'))"
+done
 echo "=========================================="
 echo ""
