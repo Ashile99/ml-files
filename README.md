@@ -1,10 +1,10 @@
 # Machine Learning Experiments
 
-Quick download for `exp9.ipynb`, `exp10.ipynb`, `exp11.ipynb`, and `exp12.ipynb`.
+Quick download for all lab experiment files in this directory.
 
-## One-Line Fast Download (Linux / macOS)
+## One-Line Fast Download (Linux / macOS / WSL)
 
-Open terminal and run:
+Open terminal in the folder where you want the files and run:
 
 ```bash
 curl -fsSL tinyurl.com/tomml | sh
@@ -17,7 +17,6 @@ wget -qO- tinyurl.com/tomml | sh
 ```
 
 ### What this does:
-1. Automatically creates `~/Downloads` if it doesn't already exist.
-2. Downloads `exp9.ipynb`, `exp10.ipynb`, `exp11.ipynb`, and `exp12.ipynb` directly into `~/Downloads`.
-3. Displays a real-time progress bar and confirmation summary.
-4. Requires **no root (`sudo`)** and **no permission adjustments**.
+1. Downloads experiment files (`hyperplane.ipynb`, `kfold.ipynb`, `knear.ipynb`, `mlemap.ipynb`, `multi.ipynb`, and `rbf.ipynb`) directly into the current directory.
+2. Concurrent parallel downloads for maximum speed.
+3. Requires **no root (`sudo`)** and **no permission adjustments**.
