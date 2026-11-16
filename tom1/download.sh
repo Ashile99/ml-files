@@ -20,47 +20,46 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
-# Load Dataset
 categories = ["comp.graphics", "rec.sport.baseball", "sci.space", "talk.politics.misc"]
 newsgroups = fetch_20newsgroups(
     subset="all", categories=categories, remove=("headers", "footers", "quotes")
 )
 X_text = newsgroups.data
 y = newsgroups.target
-# Train-Test Split
+
 X_train_text, X_test_text, y_train, y_test = train_test_split(
     X_text, y, test_size=0.2, random_state=42
 )
-# Count Features for Multinomial NB
+
 count_vectorizer = CountVectorizer(stop_words="english", max_features=5000)
 X_train_count = count_vectorizer.fit_transform(X_train_text)
 X_test_count = count_vectorizer.transform(X_test_text)
-# Binary Features for Bernoulli NB
+
 binary_vectorizer = CountVectorizer(
     stop_words="english", binary=True, max_features=5000
 )
 X_train_binary = binary_vectorizer.fit_transform(X_train_text)
 X_test_binary = binary_vectorizer.transform(X_test_text)
-# Multinomial Naive Bayes
+
 mnb = MultinomialNB()
 mnb.fit(X_train_count, y_train)
 y_pred_mnb = mnb.predict(X_test_count)
 acc_mnb = accuracy_score(y_test, y_pred_mnb)
 f1_mnb = f1_score(y_test, y_pred_mnb, average="weighted")
-# Bernoulli Naive Bayes
+
 bnb = BernoulliNB()
 bnb.fit(X_train_binary, y_train)
 y_pred_bnb = bnb.predict(X_test_binary)
 acc_bnb = accuracy_score(y_test, y_pred_bnb)
 f1_bnb = f1_score(y_test, y_pred_bnb, average="weighted")
-# Results
+
 print("Multinomial Naive Bayes")
 print("Accuracy :", acc_mnb)
 print("F1 Score :", f1_mnb)
 print("\nBernoulli Naive Bayes")
 print("Accuracy :", acc_bnb)
 print("F1 Score :", f1_bnb)
-# Comparison Table
+
 results = pd.DataFrame(
     {
         "Model": ["Multinomial NB", "Bernoulli NB"],
@@ -70,7 +69,7 @@ results = pd.DataFrame(
 )
 print("\nComparison")
 print(results)
-# Classification Reports
+
 print("\nMultinomial NB Report")
 print(classification_report(y_test, y_pred_mnb, target_names=newsgroups.target_names))
 print("\nBernoulli NB Report")
@@ -85,12 +84,11 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import KFold
 from sklearn.utils import resample
 
-# Load Iris Dataset
 iris = load_iris()
 X = iris.data
 y = iris.target
 model = DecisionTreeClassifier(random_state=42)
-# Bootstrapping
+
 boot_accuracy = []
 boot_f1 = []
 n_iterations = 10
@@ -109,7 +107,7 @@ for i in range(n_iterations):
 print("Bootstrapping Results")
 print("Average Accuracy :", round(np.mean(boot_accuracy), 4))
 print("Average F1 Score :", round(np.mean(boot_f1), 4))
-# K-Fold Cross Validation
+
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 cv_accuracy = []
 cv_f1 = []
@@ -136,33 +134,31 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-# Load Breast Cancer Dataset
 data = load_breast_cancer()
 X = data.data
 y = data.target
-# Split Dataset
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
-# Feature Scaling
+
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
-# MLE Logistic Regression
+
 mle_model = LogisticRegression(penalty="l2", C=1e6, max_iter=5000)
 mle_model.fit(X_train, y_train)
 y_pred_mle = mle_model.predict(X_test)
-# MAP Logistic Regression (L2)
+
 map_l2 = LogisticRegression(penalty="l2", C=1.0, max_iter=5000)
 map_l2.fit(X_train, y_train)
 y_pred_l2 = map_l2.predict(X_test)
-# MAP Logistic Regression (L1)
+
 map_l1 = LogisticRegression(penalty="l1", solver="liblinear", C=1.0, max_iter=5000)
 map_l1.fit(X_train, y_train)
 y_pred_l1 = map_l1.predict(X_test)
 
 
-# Evaluation Function
 def evaluate(name, y_true, y_pred):
     print("\n", name)
     print("Accuracy  :", accuracy_score(y_true, y_pred))
@@ -171,11 +167,10 @@ def evaluate(name, y_true, y_pred):
     print("F1 Score  :", f1_score(y_true, y_pred))
 
 
-# Evaluate Models
 evaluate("MLE Logistic Regression", y_test, y_pred_mle)
 evaluate("MAP Logistic Regression (L2)", y_test, y_pred_l2)
 evaluate("MAP Logistic Regression (L1)", y_test, y_pred_l1)
-# Coefficient Comparison
+
 coef_df = pd.DataFrame(
     {"MLE": mle_model.coef_[0], "MAP_L2": map_l2.coef_[0], "MAP_L1": map_l1.coef_[0]}
 )
@@ -191,16 +186,14 @@ from tensorflow.keras.datasets import fashion_mnist
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-# Load Fashion MNIST Dataset
 (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
-# Preprocessing
-# Normalize Pixel Values
+
 X_train = X_train / 255.0
 X_test = X_test / 255.0
-# Flatten Images
+
 X_train = X_train.reshape(len(X_train), -1)
 X_test = X_test.reshape(len(X_test), -1)
-# Experiment with Different K Values
+
 k_values = [1, 3, 5, 7, 9]
 results = []
 for k in k_values:
@@ -217,13 +210,13 @@ for k in k_values:
     print("Precision:", precision)
     print("Recall   :", recall)
     print("F1 Score :", f1)
-# Results Table
+
 results_df = pd.DataFrame(
     results, columns=["K", "Accuracy", "Precision", "Recall", "F1 Score"]
 )
 print("\nResults Summary")
 print(results_df)
-# Accuracy Plot
+
 plt.figure(figsize=(8, 5))
 plt.plot(results_df["K"], results_df["Accuracy"], marker="o")
 plt.xlabel("K Value")
@@ -244,34 +237,32 @@ from sklearn.metrics import recall_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import classification_report
 
-# Load Fashion MNIST dataset
 (X_train, y_train), (X_test, y_test) = fashion_mnist.load_data()
-# Normalize images
+
 X_train = X_train / 255.0
 X_test = X_test / 255.0
-# Flatten images
+
 X_train = X_train.reshape(len(X_train), -1)
 X_test = X_test.reshape(len(X_test), -1)
-# Reduce training time
+
 X_train = X_train[:10000]
 y_train = y_train[:10000]
 X_test = X_test[:2000]
 y_test = y_test[:2000]
-# Linear Kernel
+
 linear_svm = SVC(kernel="linear")
 linear_svm.fit(X_train, y_train)
 linear_pred = linear_svm.predict(X_test)
-# Polynomial Kernel
+
 poly_svm = SVC(kernel="poly", degree=3)
 poly_svm.fit(X_train, y_train)
 poly_pred = poly_svm.predict(X_test)
-# RBF Kernel
+
 rbf_svm = SVC(kernel="rbf")
 rbf_svm.fit(X_train, y_train)
 rbf_pred = rbf_svm.predict(X_test)
 
 
-# Evaluation function
 def evaluate_model(y_true, y_pred, model_name):
     accuracy = accuracy_score(y_true, y_pred)
     precision = precision_score(y_true, y_pred, average="weighted")
@@ -285,7 +276,6 @@ def evaluate_model(y_true, y_pred, model_name):
     print("F1 Score :", f1)
 
 
-# Display results
 evaluate_model(y_test, linear_pred, "Linear SVM")
 evaluate_model(y_test, poly_pred, "Polynomial SVM")
 evaluate_model(y_test, rbf_pred, "RBF SVM")
@@ -300,27 +290,24 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
-# Load Iris Dataset
 iris = datasets.load_iris()
-# Select Petal Length and Petal Width
 X = iris.data[:, [2, 3]]
-# Binary Classification: Setosa = 1, Non-Setosa = 0
 y = (iris.target == 0).astype(int)
-# Train-Test Split
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.3, random_state=42
 )
-# Linear SVMw
+
 svm_model = SVC(kernel="linear", C=1)
 svm_model.fit(X_train, y_train)
-# Prediction
+
 y_pred = svm_model.predict(X_test)
-# Accuracy
+
 accuracy = accuracy_score(y_test, y_pred)
 print("Accuracy:", accuracy)
 print("\nClassification Report")
 print(classification_report(y_test, y_pred))
-# Plot Data Points
+
 plt.figure(figsize=(8, 6))
 plt.scatter(X[:, 0], X[:, 1], c=y, cmap="coolwarm")
 ax = plt.gca()
@@ -332,11 +319,11 @@ YY, XX = np.meshgrid(yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
 Z = svm_model.decision_function(xy)
 Z = Z.reshape(XX.shape)
-# Decision Boundary and Margins
+
 ax.contour(
     XX, YY, Z, colors="k", levels=[-1, 0, 1], alpha=0.8, linestyles=["--", "-", "--"]
 )
-# Support Vectors
+
 ax.scatter(
     svm_model.support_vectors_[:, 0],
     svm_model.support_vectors_[:, 1],

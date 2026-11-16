@@ -5,12 +5,11 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import KFold
 from sklearn.utils import resample
 
-# Load Iris Dataset
 iris = load_iris()
 X = iris.data
 y = iris.target
 model = DecisionTreeClassifier(random_state=42)
-# Bootstrapping
+
 boot_accuracy = []
 boot_f1 = []
 n_iterations = 10
@@ -29,7 +28,7 @@ for i in range(n_iterations):
 print("Bootstrapping Results")
 print("Average Accuracy :", round(np.mean(boot_accuracy), 4))
 print("Average F1 Score :", round(np.mean(boot_f1), 4))
-# K-Fold Cross Validation
+
 kf = KFold(n_splits=5, shuffle=True, random_state=42)
 cv_accuracy = []
 cv_f1 = []
